@@ -79,23 +79,23 @@ v${OSTICKET_VERSION}/osTicket-v${OSTICKET_VERSION}.zip; \
         wget -q -O /var/www/html/include/i18n/${lang}.phar \
             https://s3.amazonaws.com/downloads.osticket.com/lang/${lang}.phar; \
     done
-ENV OSTICKET_PLUGINS_VERSION=93d7d6d11670c7eac7a4e432dbc15f40375a70cf \
-    OSTICKET_PLUGINS_SHA256SUM=0d4b60045be607d377a7d27a3d5143d5db36041f992c8924816604a81bb342d6
-RUN set -ex; \
-    \
-    wget -q -O osTicket-plugins.tar.gz https://github.com/devinsolutions/osTicket-plugins/archive/\
-${OSTICKET_PLUGINS_VERSION}.tar.gz; \
-    echo "${OSTICKET_PLUGINS_SHA256SUM}  osTicket-plugins.tar.gz" | sha256sum -c; \
-    tar -xzf osTicket-plugins.tar.gz --one-top-level --strip-components 1; \
-    rm osTicket-plugins.tar.gz; \
-    \
-    cd osTicket-plugins; \
-    php make.php hydrate; \
-    find * -maxdepth 0 -type d ! -path doc ! -path lib -exec mv '{}' \
-        /var/www/html/include/plugins +; \
-    cd ..; \
-    \
-    rm -r osTicket-plugins /root/.composer
+#ENV OSTICKET_PLUGINS_VERSION=93d7d6d11670c7eac7a4e432dbc15f40375a70cf \
+#    OSTICKET_PLUGINS_SHA256SUM=0d4b60045be607d377a7d27a3d5143d5db36041f992c8924816604a81bb342d6
+#RUN set -ex; \
+#    \
+#    wget -q -O osTicket-plugins.tar.gz https://github.com/devinsolutions/osTicket-plugins/archive/\
+#${OSTICKET_PLUGINS_VERSION}.tar.gz; \
+#    echo "${OSTICKET_PLUGINS_SHA256SUM}  osTicket-plugins.tar.gz" | sha256sum -c; \
+#    tar -xzf osTicket-plugins.tar.gz --one-top-level --strip-components 1; \
+#    rm osTicket-plugins.tar.gz; \
+#    \
+#    cd osTicket-plugins; \
+#    php make.php hydrate; \
+#    find * -maxdepth 0 -type d ! -path doc ! -path lib -exec mv '{}' \
+#        /var/www/html/include/plugins +; \
+#    cd ..; \
+#    \
+#    rm -r osTicket-plugins /root/.composer
 ENV OSTICKET_SLACK_VERSION=cd98e54fcadf1a5dd8e78b0a0380561c7ef29b02 \
     OSTICKET_SLACK_SHA256SUM=9cdead701fd1be91a64451dfaca98148b997dc4e5a0ff1a61965bffeebd65540
 RUN set -ex; \

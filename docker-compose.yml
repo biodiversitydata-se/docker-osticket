@@ -14,6 +14,17 @@ services:
 #    ports:
 #      - 3307:3306
 
+#  postfix:
+#    image: juanluisbaptiste/postfix:latest
+#    expose:
+#      - "25"
+#    env_file:
+#      - env/.envpostfix
+#    volumes:
+#     - "/etc/localtime:/etc/localtime:ro"
+#    networks:
+#      - basnet
+      
   osticket:
     container_name: sbdi_osticket
     restart: unless-stopped
@@ -28,7 +39,7 @@ services:
       MYSQL_HOST: mysql
       MYSQL_USER: osticket
       MYSQL_PASSWORD: secret
-#      SMTP_HOST: 
+#      SMTP_HOST: postfix
       SMTP_TLS: 0
       INSTALL_NAME: SBDI Support
       ADMIN_FIRSTNAME: Admin
