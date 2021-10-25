@@ -1,19 +1,43 @@
-version: '3'
+version: '3.5'
 services:
-  mysql:
-    image: mysql:5.7
+  mysql_osticket:
+    container_name: mysql_osticket
+    restart: unless-stopped
+    image: mysql:5.7.35
     environment:
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: supersecret
       MYSQL_DATABASE: osticket
-      MYSQL_USER: osticket
       MYSQL_PASSWORD: secret
+      MYSQL_USER: osticket
+#    volumes:
+#      - /var/lib/osticket/mysql/:/var/lib/mysql
+#    ports:
+#      - 3307:3306
+
   osticket:
-    image: devinsolutions/osticket:latest
+    container_name: sbdi_osticket
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql_osticket
+    links: 
+      - mysql_osticket:mysql
     environment:
       MYSQL_HOST: mysql
-      MYSQL_DATABASE: osticket
       MYSQL_USER: osticket
       MYSQL_PASSWORD: secret
+#      SMTP_HOST: 
+      SMTP_TLS: 0
+      INSTALL_NAME: SBDI Support
+      ADMIN_FIRSTNAME: Admin
+      ADMIN_LASTNAME: User
+#      ADMIN_EMAIL: support@sbdi.se
+      ADMIN_USERNAME: ostadmin
+      ADMIN_PASSWORD: Admin1
+#    volumes:
+#      - /var/lib/osticket/??/:/var/lib/osticket 
+# needed for plugins      
     ports:
-      - 8080:80
-    restart: on-failure
+    - 8080:80
