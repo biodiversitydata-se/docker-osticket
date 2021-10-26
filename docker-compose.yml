@@ -9,10 +9,10 @@ services:
       MYSQL_DATABASE: osticket
       MYSQL_PASSWORD: secret
       MYSQL_USER: osticket
-#    volumes:
-#      - /var/lib/osticket/mysql/:/var/lib/mysql
-#    ports:
-#      - 3307:3306
+    volumes:
+      - .var/lib/mysql/:/var/lib/mysql
+    ports:
+      - 3307:3306
 
 #  postfix:
 #    image: juanluisbaptiste/postfix:latest
