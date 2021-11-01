@@ -50,8 +50,6 @@ jobs:
           context: .
           # Note: tags has to be all lower-case
           tags: |
-            #ghcr.io/biodiversitydata-se/docker-osticket/osticket:latest
-            #${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{env.IMAGE_VERSION}}
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/master' }}
