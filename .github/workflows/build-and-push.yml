@@ -28,7 +28,7 @@ jobs:
           IMG=osticket
           echo "IMG=${IMG}" >> $GITHUB_ENV
           echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY}/${IMG}" >> $GITHUB_ENV
-          echo "IMAGE_VERSION=$(echo ${{ steps.tagfile.outputs.content }} | tail -1)" >> $GITHUB_ENV
+          echo "IMAGE_VERSION=`echo ${{ steps.tagfile.outputs.content }} | tail -1 `" >> $GITHUB_ENV
           
 
       # setup Docker buld action
