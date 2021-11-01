@@ -9,7 +9,7 @@ services:
     image: mysql:5.7.35
     env_file: ./env
     volumes:
-      -  ./.root/var/lib/mysql:/var/lib/mysql
+      -  ${DOCKER_ROOT:-./.root}/var/lib/mysql:/var/lib/mysql
     ports:
       - 3306:3306
 
@@ -36,7 +36,7 @@ services:
       - mysql_osticket:mysql
     env_file: ./env
     volumes:
-      -  ./.root/var/lib/osticket:/var/lib/osticket
+      -  ${DOCKER_ROOT:-./.root}/var/lib/osticket:/var/lib/osticket
     ports:
     - 8080:80
 
