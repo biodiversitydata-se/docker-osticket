@@ -17,19 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Read Tag File
-        id: tagfile
-        uses: juliangruber/read-file-action@v1
-        with: 
-          path: ./tags
-        
       - name: Set Environment Variables
         run: |
-          IMG=osticket
-          echo "IMG=${IMG}" >> $GITHUB_ENV
-          echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY}/${IMG}" >> $GITHUB_ENV
-          echo "IMAGE_VERSION=`echo ${{ steps.tagfile.outputs.content }} | tail -1 `" >> $GITHUB_ENV
-          echo "IMAGE_VERSION_2=`tail -1 <  ./tags`" >> $GITHUB_ENV
+          IMG_NAME=osticket
+          echo "IMG_NAME=${IMG_NAME}" >> $GITHUB_ENV
+          echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY}/${IMG_NAME}" >> $GITHUB_ENV
+          echo "OS_TICKET_VERSION=`tail -1 <  ./tags`" >> $GITHUB_ENV
           
 
       # setup Docker buld action
@@ -51,9 +44,8 @@ jobs:
           context: .
           # Note: tags has to be all lower-case
           tags: |
-            ${{ env.IMAGE }}:${{env.IMAGE_VERSION}}
-            ${{ env.IMAGE }}:${{env.IMAGE_VERSION_2}}
-          # build on feature branches, push only on main branch
+            ${{ env.IMAGE }}:${{env.OS_TICKET_VERSION}}
+          # build on feature branches, push only on main branch - TODO: Change this
           push: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Image digest
