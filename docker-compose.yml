@@ -1,18 +1,17 @@
-version: '3.5'
+version: '3.7'
+
+# Run with UID=$(id -u) GID=$(id -g) docker-compose up
 services:
   mysql_osticket:
     container_name: mysql_osticket
+    user: "${UID}:${GID}"
     restart: unless-stopped
     image: mysql:5.7.35
-    environment:
-      MYSQL_ROOT_PASSWORD: supersecret
-      MYSQL_DATABASE: osticket
-      MYSQL_PASSWORD: secret
-      MYSQL_USER: osticket
+    env_file: ./env
     volumes:
-      - .var/lib/mysql/:/var/lib/mysql
+      -  ./.root/var/lib/mysql:/var/lib/mysql
     ports:
-      - 3307:3306
+      - 3306:3306
 
 #  postfix:
 #    image: juanluisbaptiste/postfix:latest
@@ -35,20 +34,9 @@ services:
       - mysql_osticket
     links: 
       - mysql_osticket:mysql
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: osticket
-      MYSQL_PASSWORD: secret
-#      SMTP_HOST: postfix
-      SMTP_TLS: 0
-      INSTALL_NAME: SBDI Support
-      ADMIN_FIRSTNAME: Admin
-      ADMIN_LASTNAME: User
-#      ADMIN_EMAIL: support@sbdi.se
-      ADMIN_USERNAME: ostadmin
-      ADMIN_PASSWORD: Admin1
-#    volumes:
-#      - /var/lib/osticket/??/:/var/lib/osticket 
-# needed for plugins      
+    env_file: ./env
+    volumes:
+      -  ./.root/var/lib/osticket:/var/lib/osticket
     ports:
     - 8080:80
+
