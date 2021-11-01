@@ -29,6 +29,7 @@ jobs:
           echo "IMG=${IMG}" >> $GITHUB_ENV
           echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY}/${IMG}" >> $GITHUB_ENV
           echo "IMAGE_VERSION=`echo ${{ steps.tagfile.outputs.content }} | tail -1 `" >> $GITHUB_ENV
+          echo "IMAGE_VERSION_2=`tail -1 <  ./tags`" >> $GITHUB_ENV
           
 
       # setup Docker buld action
@@ -51,6 +52,7 @@ jobs:
           # Note: tags has to be all lower-case
           tags: |
             ${{ env.IMAGE }}:${{env.IMAGE_VERSION}}
+            ${{ env.IMAGE }}:${{env.IMAGE_VERSION_2}}
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/master' }}
 
