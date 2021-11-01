@@ -16,6 +16,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Read Tag File
+        id: tagfile
+        uses: juliangruber/read-file-action@v1
+        with: 
+          path: ./tags
+        
+      - name: Set Environment Variables
+        run: |
+          IMG=osticket
+          echo "IMG=${IMG}" >> $GITHUB_ENV
+          echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY}/${IMG}" >> $GITHUB_ENV
+          echo "IMAGE_VERSION=$(echo ${{ steps.tagfile.outputs.content }} | tail -1)" >> $GITHUB_ENV
+          
 
       # setup Docker buld action
       - name: Set up Docker Buildx
@@ -36,7 +50,9 @@ jobs:
           context: .
           # Note: tags has to be all lower-case
           tags: |
-            ghcr.io/biodiversitydata-se/docker-osticket/osticket:latest
+            #ghcr.io/biodiversitydata-se/docker-osticket/osticket:latest
+            #${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{env.IMAGE_VERSION}}
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/master' }}
 
