@@ -36,7 +36,7 @@ jobs:
           context: .
           # Note: tags has to be all lower-case
           tags: |
-            ghcr.io/biodiversitydata-se/docker-osticket:latest
+            ghcr.io/biodiversitydata-se/docker-osticket/osticket:latest
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/master' }}
 
