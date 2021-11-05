@@ -9,7 +9,7 @@ services:
     image: mysql:5.7.35
     env_file: ./env
     volumes:
-      -  ${DOCKER_ROOT:-./.root}/var/lib/mysql:/var/lib/mysql
+      -  data_osticket_mysql:/var/lib/mysql
     ports:
       - 3306:3306
 
@@ -26,17 +26,34 @@ services:
       
   osticket:
     container_name: sbdi_osticket
+#    user: "${UID}:${GID}"
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/biodiversitydata-se/docker-osticket/osticket:1.15.4
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     depends_on:
       - mysql_osticket
     links: 
       - mysql_osticket:mysql
     env_file: ./env
     volumes:
-      -  ${DOCKER_ROOT:-./.root}/var/lib/osticket:/var/lib/osticket
+      - data_osticket_osticket:/var/www/html
     ports:
     - 8080:80
 
+volumes:
+  data_osticket_mysql:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "./.root/var/lib/mysql"
+  data_osticket_osticket:
+    driver: local
+    driver_opts:
+      type: none
+      o: "bind"
+      device: "./.root/var/www/html"
+      
+      
