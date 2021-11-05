@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=Stop Osticket
+Icon=media-playback-stop
+Exec=/usr/bin/x-terminal-emulator --title="Osticket stop" -e "bash -c 'cd $(dirname %k);  bin/stop.sh;'"
+Categories=Application;
+Name[sv]=Stop-Osticket.desktop
