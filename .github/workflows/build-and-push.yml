@@ -16,6 +16,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Set Environment Variables
+        run: |
+          IMG_NAME=osticket
+          echo "IMG_NAME=${IMG_NAME}" >> $GITHUB_ENV
+          echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY}/${IMG_NAME}" >> $GITHUB_ENV
+          echo "OS_TICKET_VERSION=`tail -1 <  ./tags`" >> $GITHUB_ENV
+          
 
       # setup Docker buld action
       - name: Set up Docker Buildx
@@ -36,9 +44,9 @@ jobs:
           context: .
           # Note: tags has to be all lower-case
           tags: |
-            ghcr.io/biodiversitydata-se/docker-osticket:latest
-          # build on feature branches, push only on main branch
-          push: ${{ github.ref == 'refs/heads/main' }}
+            ${{ env.IMAGE }}:${{env.OS_TICKET_VERSION}}
+          # build on feature branches, push only on main branch - TODO: Change this
+          push: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
