@@ -10,6 +10,7 @@ services:
     env_file: ./env
     volumes:
       -  data_osticket_mysql:/var/lib/mysql
+      - ./.dockerfiles/init.sql:/docker-entrypoint-initdb.d/1.sql
     ports:
       - 3306:3306
 
@@ -39,6 +40,7 @@ services:
     env_file: ./env
     volumes:
       - data_osticket_osticket:/var/www/html
+      - "./.dockerfiles/init.sql:/docker-entrypoint-initdb.d/1.sql"
     ports:
     - 8080:80
 
