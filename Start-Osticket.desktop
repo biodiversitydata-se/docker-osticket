@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Terminal=false
-Name=Start-Osticket
-Icon=media-playback-start
-Exec=/usr/bin/x-terminal-emulator --tab --title="Osticket start" -e "bash -c 'cd $(dirname %k); bin/start.sh;$SHELL'"
-Categories=Application;
-Name[sv]=Start-Osticket.desktop
