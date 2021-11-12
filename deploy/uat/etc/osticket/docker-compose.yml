@@ -28,12 +28,12 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: "${DOCKER_VOLUMES:-/mnt/data/volumes}/osticket_mysql"
+      device: "${DOCKER_VOLUMES:-/docker/var/volumes}/osticket_mysql"
   data_osticket_osticket:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "${DOCKER_VOLUMES:-/mnt/data/volumes}/osticket_osticket"
+      device: "${DOCKER_VOLUMES:-/docker/var/volumes}/osticket_osticket"
 
   
