@@ -3,13 +3,13 @@ cd $(dirname $0)
 . utils.sh
 
 cd ..
-export DOCKER_CONTEXT=$(pwd)
+export DOCKER_CTX=$(pwd)
 cd ..
 
-# TBD: fix this with BACKUP_CONTEXT
-export BACKUP_CONTEXT=$(pwd)/backup
+# TBD: fix this with BACKUP_CTX
+export BACKUP_CTX=${DOCKER_CTX}/backup
 
-cd ${DOCKER_CONTEXT}/etc/osticket
+cd ${DOCKER_CTX}/etc/osticket
 
 export $(grep -v '^#' env/.envosticket | xargs)
 
@@ -19,7 +19,7 @@ export $(grep -v '^#' env/.envosticket | xargs)
 
 
 
-cd ${BACKUP_CONTEXT}
+cd ${BACKUP_CTX}
 
 [ ! -e "${MYSQL_DATABASE}.sql" ] &&  log_fatal 81 "${MYSQL_DATABASE}.sql does not exist"
 

@@ -2,13 +2,13 @@
 cd $(dirname $0)
 . utils.sh
 cd ..
-export DOCKER_CONTEXT=$(pwd)
+export DOCKER_CTX=$(pwd)
 cd ..
 
 # TBD: fix this with BACKUP_CONTEXT
-export BACKUP_CONTEXT=$(pwd)/backup
+export BACKUP_CONTEXT=${DOCKER_CTX}/backup
 
-cd ${DOCKER_CONTEXT}/etc/osticket
+cd ${DOCKER_CTX}/etc/osticket
 
 export $(grep -v '^#' env/.envosticket | xargs)
 

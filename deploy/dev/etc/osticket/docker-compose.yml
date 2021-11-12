@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
     image: mysql:5.7.35
     user: $CURRENT_USER
-    env_file: "${DOCKER_CONTEXT:-/docker}/etc/osticket/env/.envosticket"
+    env_file: "${DOCKER_MOUNT:-/docker}/etc/osticket/env/.envosticket"
     volumes:
       -  data_osticket_mysql:/var/lib/mysql
-      - "${DOCKER_CONTEXT:-/docker}/etc/osticket/db/initdb.d:/docker-entrypoint-initdb.d"
+      - "${DOCKER_MOUNT:-/docker}/etc/osticket/db/initdb.d:/docker-entrypoint-initdb.d"
     ports:
       - 3306:3306
       
@@ -20,9 +20,10 @@ services:
       - mysql_osticket
     links: 
       - mysql_osticket:mysql
-    env_file: "${DOCKER_CONTEXT:-/docker}/etc/osticket/env/.envosticket"
+    env_file: "${DOCKER_MOUNT:-/docker}/etc/osticket/env/.envosticket"
     volumes:
       - data_osticket_osticket:/var/lib/osticket
+      - src_osticket_osticket:/var/www/html
     ports:
       - 80:80
   
@@ -32,11 +33,17 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: "${DOCKER_CONTEXT:-/docker}/var/volumes/osticket_mysql"
+      device: "${DOCKER_MOUNT:-/docker}/var/volumes/osticket_mysql"
   data_osticket_osticket:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "${DOCKER_CONTEXT:-/docker}/var/volumes/osticket_osticket"
+      device: "${DOCKER_MOUNT:-/docker}/var/volumes/osticket_osticket"
+  src_osticket_osticket:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${DOCKER_MOUNT:-/docker}/var/volumes/osticket_osticket_src"
 

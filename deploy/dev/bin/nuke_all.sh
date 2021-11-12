@@ -33,6 +33,15 @@ then
     sudo rm -rf ./var/volumes/osticket_osticket
 fi
 
+if [ -d ./var/volumes/osticket_osticket_src ]
+then
+    # TODO: Try to fix this so that current user owns these files...
+    echo "Removing var/volumes/osticket_osticket_src"
+    sudo rm -rf ./var/volumes/osticket_osticket_src
+fi
+
+
+
 if [ -d ./var/volumes/osticket_mysql ]
 then
     echo "Removing var/volumes/osticket_mysql"
