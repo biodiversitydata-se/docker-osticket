@@ -9,10 +9,12 @@ services:
     volumes:
       -  data_osticket_mysql:/var/lib/mysql
       - "${DOCKER_CONTEXT:-/docker}/etc/osticket/db/initdb.d:/docker-entrypoint-initdb.d"
+    ports:
+      - 3306:3306
       
   osticket:
     container_name: sbdi_osticket
-    image: bioatlas/osticket:1.15.4    
+    image: ghcr.io/biodiversitydata-se/docker-osticket/osticket:1.15.4.2    
     restart: unless-stopped
     depends_on:
       - mysql_osticket

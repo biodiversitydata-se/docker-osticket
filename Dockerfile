@@ -53,6 +53,7 @@ RUN set -ex; \
     \
     # Create data dir
     mkdir /var/lib/osticket; \
+    chown www-data:www-data /var/lib/osticket; \
     \
     # Clean up
     apk del .build-deps; \
