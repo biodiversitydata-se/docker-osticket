@@ -1,23 +1,22 @@
 #! /bin/bash
 cd $(dirname $0)
 . utils.sh
-
-cd ..
+cd ../../..
 export DOCKER_CTX=$(pwd)
-cd ..
+application_name='osticket'
 
-# TBD: fix this with BACKUP_CTX
-export BACKUP_CTX=${DOCKER_CTX}/backup
 
-cd ${DOCKER_CTX}/etc/osticket
+export BACKUP_CONTEXT=${DOCKER_CTX}/var/backup/${application_name}
+
+[ ! -d ${BACKUP_CONTEXT} ] && log_fatal 9 "No backup context (${BACKUP_CONTEXT) found" 
+
+cd ${DOCKER_CTX}/etc/${application_name}
 
 export $(grep -v '^#' env/.envosticket | xargs)
 
 [ -z "$MYSQL_HOST" ] &&  log_fatal 91 "MYSQL_HOST not in ./env file" 
 [ -z "$MYSQL_DATABASE" ] &&  log_fatal 92 "MYSQL_DATABASE not in ./env file" 
 [ -z "$MYSQL_ROOT_PASSWORD" ] &&  log_fatal 93 "MYSQL_ROOT_PASSWORD not in ./env file" 
-
-
 
 cd ${BACKUP_CTX}
 

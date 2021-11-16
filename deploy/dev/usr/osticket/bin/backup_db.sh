@@ -1,14 +1,17 @@
 #! /bin/bash
 cd $(dirname $0)
 . utils.sh
-cd ..
+cd ../../..
 export DOCKER_CTX=$(pwd)
-cd ..
+application_name='osticket'
 
-# TBD: fix this with BACKUP_CONTEXT
-export BACKUP_CONTEXT=${DOCKER_CTX}/backup
+export BACKUP_CONTEXT=${DOCKER_CTX}/var/backup/${application_name}
 
-cd ${DOCKER_CTX}/etc/osticket
+mkdir -p ${BACKUP_CONTEXT}
+
+[ ! -d ${BACKUP_CONTEXT} ] && log_fatal 9 "No backup context (${BACKUP_CONTEXT) found" 
+
+cd ${DOCKER_CTX}/etc/${application_name}
 
 export $(grep -v '^#' env/.envosticket | xargs)
 
@@ -18,5 +21,6 @@ export $(grep -v '^#' env/.envosticket | xargs)
 
 
 cd ${BACKUP_CONTEXT}
+
 docker exec $MYSQL_HOST mysqldump --user root --password=$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE > ${MYSQL_DATABASE}_dump.sql
 mv -b ${MYSQL_DATABASE}_dump.sql ${MYSQL_DATABASE}.sql

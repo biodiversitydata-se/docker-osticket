@@ -1,9 +1,9 @@
 #! /bin/bash
 
 cd $(dirname $0)
-cd ..
+cd ../../..
 
-export DOCKER_CONTEXT=$(pwd)
+export DOCKER_CTX=$(pwd)
 export CURRENT_USER=$(id -u):$(id -g)
 
 cd etc/osticket

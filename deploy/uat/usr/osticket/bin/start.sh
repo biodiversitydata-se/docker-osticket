@@ -3,7 +3,7 @@
 cd $(dirname $0)
 . utils.sh
 cd ../../..
-export DOCKER_MOUNT=$(pwd)
+export DOCKER_CTX=$(pwd)
 application_name='osticket'
 
 if [ ! -d ./var/volumes/osticket_mysql ]
