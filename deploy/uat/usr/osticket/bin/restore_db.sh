@@ -6,9 +6,9 @@ export DOCKER_CTX=$(pwd)
 application_name='osticket'
 
 
-export BACKUP_CONTEXT=${DOCKER_CTX}/var/backup/${application_name}
+export BACKUP_CTX=${DOCKER_CTX}/var/backup/${application_name}
 
-[ ! -d ${BACKUP_CONTEXT} ] && log_fatal 9 "No backup context (${BACKUP_CONTEXT) found" 
+[ ! -d ${BACKUP_CTX} ] && log_fatal 9 "No backup context (${BACKUP_CTX}) found" 
 
 cd ${DOCKER_CTX}/etc/${application_name}
 

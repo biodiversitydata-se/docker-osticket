@@ -31,10 +31,12 @@ ssh  ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} "[ ! -d ${DEPLOYMENT_TARGET_DIR} ]" &
 target_etc_dir=${DEPLOYMENT_TARGET_DIR}/etc/${application_name}
 target_usr_dir=${DEPLOYMENT_TARGET_DIR}/usr/${application_name}
 target_volumes_dir=${DEPLOYMENT_TARGET_DIR}/var/volumes
+target_backup_dir=${DEPLOYMENT_TARGET_DIR}/var/backup/${application_name}
 
 ssh -t ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} "sudo mkdir -p ${target_etc_dir} && sudo chown ${DEPLOYMENT_USER}. ${target_etc_dir}"
 ssh -t ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} "sudo mkdir -p ${target_usr_dir} && sudo chown ${DEPLOYMENT_USER}. ${target_usr_dir}"
 ssh -t ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} "sudo mkdir -p ${target_volumes_dir} && sudo chown ${DEPLOYMENT_USER}. ${target_volumes_dir}"
+ssh -t ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} "sudo mkdir -p ${target_backup_dir} && sudo chown ${DEPLOYMENT_USER}. ${target_backup_dir}"
 
 cd ${deployment_src_dir}
 
