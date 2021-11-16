@@ -4,13 +4,10 @@ services:
     container_name: mysql_osticket
     restart: unless-stopped
     image: mysql:5.7.35
-    user: $CURRENT_USER
     env_file: "${DOCKER_MOUNT:-/docker}/etc/osticket/env/.envosticket"
     volumes:
       -  data_osticket_mysql:/var/lib/mysql
       - "${DOCKER_MOUNT:-/docker}/etc/osticket/db/initdb.d:/docker-entrypoint-initdb.d"
-#    ports:
-#      - 3306:3306
       
   osticket:
     container_name: sbdi_osticket
@@ -23,7 +20,6 @@ services:
     env_file: "${DOCKER_MOUNT:-/docker}/etc/osticket/env/.envosticket"
     volumes:
       - data_osticket_osticket:/var/lib/osticket
-#      - src_osticket_osticket:/var/www/html
     ports:
       - 80:80
   
@@ -40,10 +36,4 @@ volumes:
       type: none
       o: bind
       device: "${DOCKER_MOUNT:-/docker}/var/volumes/osticket_osticket"
-#  src_osticket_osticket:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      o: bind
-#      device: "${DOCKER_MOUNT:-/docker}/var/volumes/osticket_osticket_src"
 
