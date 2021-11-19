@@ -1,12 +1,12 @@
 #! /bin/bash
 
 cd $(dirname $0)
-. utils.sh
+. log_utils
 cd ..
 
 application_name=osticket
 
-deployment_target="uat"
+deployment_target="uat" # or "prod" or "dev?"
 deployment_src_dir=$(pwd)/deploy/${deployment_target}
 deployment_config=${deployment_src_dir}/etc/${application_name}/deploy/deployment.cnf
 
@@ -15,12 +15,13 @@ deployment_config=${deployment_src_dir}/etc/${application_name}/deploy/deploymen
 
 
 # Read deployment parameters:
-export $(grep -v '^#' "${deployment_config}" | xargs)
+#export $(grep -v '^#' "${deployment_config}" | xargs)
+. ${deployment_config}
 
 # Check that all needed deployment parameters are set: 
-[ -z "$DEPLOYMENT_HOST" ] &&  log_fatal 91 "DEPLOYMENT_HOST not in ./deployment.cnf file" 
-[ -z "$DEPLOYMENT_USER" ] &&  log_fatal 92 "DEPLOYMENT_USER not in ./deployment.cnf file" 
-[ -z "$DEPLOYMENT_TARGET_DIR" ] &&  log_fatal 93 "DEPLOYMENT_TARGET_DIR not in ./deployment.cnf file" 
+[ -z "$DEPLOYMENT_HOST" ] &&  log_fatal 91 "DEPLOYMENT_HOST not in ${deployment_config}" 
+[ -z "$DEPLOYMENT_USER" ] &&  log_fatal 92 "DEPLOYMENT_USER not in ${deployment_config}" 
+[ -z "$DEPLOYMENT_TARGET_DIR" ] &&  log_fatal 93 "DEPLOYMENT_TARGET_DIR not in ${deployment_config}" 
 
 # Check that application docker dir exists on host:
 ssh  ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} "[ ! -d ${DEPLOYMENT_TARGET_DIR} ]" && log_fatal 81 "${DEPLOYMENT_TARGET_DIR} does not exist on application host" 
