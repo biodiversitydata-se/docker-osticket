@@ -1,0 +1,13 @@
+--- 
+- name: Install Osticket locally
+  hosts: localhost
+  vars:
+    docker_ctx: "{{inventory_dir }}/../docker"
+  roles:
+    - osticket
+  tasks:
+    - debug:
+        var: docker_ctx
+
+
+  

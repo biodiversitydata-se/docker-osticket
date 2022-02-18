@@ -1,0 +1,9 @@
+# Ansible roles
+# =============
+
+[servers]
+localhost
+
+
+[all:vars]
+osticket_volumes="osticket_mysql osticket_osticket osticket_osticket_src"
