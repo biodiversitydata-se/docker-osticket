@@ -1,5 +1,5 @@
 --- 
-- name: Install Osticket locally
+- name: Install Osticket
   hosts: localhost
   vars:
     docker_ctx: "{{inventory_dir }}/../docker"
@@ -9,5 +9,9 @@
     - debug:
         var: docker_ctx
 
-
+    - name: Setup env
+      copy:
+        src: docker/etc/osticket/env/dev/envosticket
+        dest: "{{ docker_ctx }}/etc/osticket/env/.envosticket"
+        mode: 0640
   

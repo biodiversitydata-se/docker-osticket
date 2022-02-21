@@ -1,8 +1,6 @@
 - name: Ensure configuration and script directories
   file:
-    path: "{{ docker_ctx | default('/docker') }}/{{item}}"
-#    owner: root
-#    group: root
+    path: "{{ docker_ctx }}/{{item}}"
     mode: 0750
     recurse: yes
     state: directory
@@ -23,46 +21,27 @@
 - name: Install "docker-compose.yml" 
   template:
     src: etc/docker-compose.yml
-    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/docker-compose.yml"
-#    owner: root
-#    group: root
+    dest: "{{ docker_ctx }}/etc/osticket/docker-compose.yml"
     mode: 0644
 
 - name: Install "osticketenv.template" 
   copy:
     src: etc/osticketenv.template
-    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/env/osticketenv.template"
-#    owner: root
-#    group: root
+    dest: "{{ docker_ctx }}/etc/osticket/env/osticketenv.template"
     mode: 0644
-
-- name: Decrypt and install ".envosticket"
-  copy:
-    src: etc/.envosticket
-    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/env/.envosticket"
-    decrypt: yes
-#    owner: root
-#    group: root
-    mode: 0640
-    backup: no
 
 - name: Install "init.sql" 
   copy:
-    src: etc/osticketenv.template
-    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/db/initdb.d/init.sql"
- #   owner: root
- #   group: root
+    src: etc/init.sql
+    dest: "{{ docker_ctx }}/etc/osticket/db/initdb.d/init.sql"
     mode: 0644
-
 
 - name: Install maintenance scripts
   vars:
     docker_volumes: "{{ osticket_volumes | default('osticket_mysql osticket_osticket') }}"
   template:
     src: "bin/{{item}}"
-    dest: "{{ docker_ctx | default('/docker') }}/usr/osticket/bin/{{item}}"
- #   owner: root
- #   group: root
+    dest: "{{ docker_ctx }}/usr/osticket/bin/{{item}}"
     mode: 0755
   with_items:
     - backup_db.sh       
@@ -72,6 +51,4 @@
     - nuke_all.sh
     - start.sh
     - log_utils
-    
-
 
