@@ -13,7 +13,7 @@ log_logging_application="MGM/${application_name}"
 export DOCKER_CTX={{ docker_ctx | default('/docker') }}
 
 cd ${DOCKER_CTX}/var/volumes
-for volume in {{ docker_volumes }} 
+for volume in {% for vol in docker_volumes %} {{ vol }} {% endfor %} 
 do
     if [ ! -d ${volume} ]
     then

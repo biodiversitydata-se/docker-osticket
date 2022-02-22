@@ -38,7 +38,7 @@
 
 - name: Install maintenance scripts
   vars:
-    docker_volumes: "{{ osticket_volumes | default('osticket_mysql osticket_osticket') }}"
+    docker_volumes: "{{ osticket_volumes | default(['osticket_mysql', 'osticket_osticket']) }}"
   template:
     src: "bin/{{item}}"
     dest: "{{ docker_ctx }}/usr/osticket/bin/{{item}}"
@@ -50,7 +50,16 @@
     - create_db_seed.sh
     - nuke_all.sh
     - start.sh
+    - deploy_stack.sh
     - log_utils
+
+- name: Ensure volumes
+  file:
+    path: "{{ docker_ctx }}/var/volumes/{{item}}"
+    mode: 0755
+    recurse: yes
+    state: directory
+  with_items: "{{ osticket_volumes | default(['osticket_mysql', 'osticket_osticket']) }}"
 
 - name: Install "proxy.conf" 
   copy:
