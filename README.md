@@ -1,6 +1,9 @@
 docker-osticket
 ===============
 
+osTicket adpted to SBDI
+
+
 # Introduction
 
 Docker image for running version 1.15 of [osTicket](http://osticket.com/).
