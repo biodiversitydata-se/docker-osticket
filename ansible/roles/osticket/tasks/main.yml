@@ -55,7 +55,7 @@
 - name: Install "proxy.conf" 
   copy:
     src: etc/proxy.conf
-    dest: "{{ docker_ctx | default('/docker') }}/etc/proxy.conf"
+    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/proxy.conf"
     owner: root
     group: root
     mode: 0644
