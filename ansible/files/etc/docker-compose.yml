@@ -1,27 +1,16 @@
 version: '3.7'
-{% if deployment_prefix is defined  %}
-networks:
-  {{ deployment_prefix }}_sbdi_front:
-    external: true
-{% endif %}
 services:
   mysql_osticket:
     container_name: mysql_osticket
     restart: unless-stopped
     image: mysql:5.7.35
-    user: $CURRENT_USER
     env_file: "${DOCKER_CTX:-/docker}/etc/osticket/env/.envosticket"
     volumes:
       -  data_osticket_mysql:/var/lib/mysql
       - "${DOCKER_CTX:-/docker}/etc/osticket/db/initdb.d:/docker-entrypoint-initdb.d"
-{% if deployment_prefix is not defined  %}          
     ports:
       - 33061:3306
-{% else %}
-    networks:
-      - {{ deployment_prefix }}_sbdi_front
-{% endif %}
-
+      
   osticket:
     container_name: sbdi_osticket
     image: ghcr.io/biodiversitydata-se/docker-osticket/osticket:1.15.4.2    
@@ -33,15 +22,10 @@ services:
     env_file: "${DOCKER_CTX:-/docker}/etc/osticket/env/.envosticket"
     volumes:
       - data_osticket_osticket:/var/lib/osticket
-{% if deployment_prefix is not defined  %}    
-      - src_osticket_osticket:/var/www/html
+      - src_osticket_osticket:/var/www/html§
     ports:
       - 8081:80
-{% else %}
-    networks:
-      - {{ deployment_prefix }}_sbdi_front
-{% endif %}
-
+  
 volumes:
   data_osticket_mysql:
     driver: local
@@ -55,11 +39,10 @@ volumes:
       type: none
       o: bind
       device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_osticket"
-{% if deployment_prefix is not defined  %}       
+
   src_osticket_osticket:
     driver: local
     driver_opts:
       type: none
       o: bind
       device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_osticket_src"
-{% endif %}

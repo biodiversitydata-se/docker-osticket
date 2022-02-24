@@ -18,12 +18,6 @@
     - var/backup
     - var/backup/osticket
     
-- name: Install "docker-compose.yml" 
-  template:
-    src: etc/docker-compose.yml
-    dest: "{{ docker_ctx }}/etc/osticket/docker-compose.yml"
-    mode: 0644
-
 - name: Install "osticketenv.template" 
   copy:
     src: etc/osticketenv.template
@@ -53,18 +47,16 @@
     - deploy_stack.sh
     - log_utils
 
-- name: Ensure volumes
-  file:
-    path: "{{ docker_ctx }}/var/volumes/{{item}}"
-    mode: 0755
-    recurse: yes
-    state: directory
-  with_items: "{{ osticket_volumes | default(['osticket_mysql', 'osticket_osticket']) }}"
+# - name: Ensure volumes
+#   file:
+#     path: "{{ docker_ctx }}/var/volumes/{{item}}"
+#     mode: 0755
+#     recurse: yes
+#     state: directory
+#   with_items: "{{ osticket_volumes | default(['osticket_mysql', 'osticket_osticket']) }}"
 
 - name: Install "proxy.conf" 
-  copy:
+  template:
     src: etc/proxy.conf
     dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/proxy.conf"
-    owner: root
-    group: root
     mode: 0644
