@@ -1,0 +1,10 @@
+# Ansible roles
+# =============
+
+[servers]
+localhost
+
+[all:vars]
+swarm_deployment=False
+standalone_deployment=True
+development_deployment=True

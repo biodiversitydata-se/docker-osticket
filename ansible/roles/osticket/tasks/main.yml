@@ -1,3 +1,20 @@
+- debug:
+    var: swarm_deployment
+- debug:
+    var: standalone_deployment
+- debug:
+    var: development_deployment
+- debug:
+    var: osticket_version
+- debug:
+    var: server_name
+- debug:
+    var: domain
+- debug:
+    var: frontend_network
+- debug:
+    var: docker_volumes
+    
 - name: Ensure configuration and script directories
   file:
     path: "{{ docker_ctx }}/{{item}}"
@@ -5,18 +22,30 @@
     recurse: yes
     state: directory
   with_items:
-    - etc
     - etc/osticket
     - etc/osticket/env
     - etc/osticket/db
     - etc/osticket/db/initdb.d
-    - usr
     - usr/osticket
     - usr/osticket/bin
-#    - var
     - var/volumes
     - var/backup
     - var/backup/osticket
+
+- name: Ensure write access for docker group
+  file:
+    path: "{{ docker_ctx }}/{{item}}"
+    mode: 0775
+    group: docker
+    recurse: yes
+    state: directory
+  with_items:
+    - etc/osticket/db/initdb.d
+    - var/backup/osticket
+  when: not standalone_deployment
+
+# Write access for group docker in  var/backup/osticket for backup_db.sh
+# Write access for group docker in  etc/osticket/db/init.db for create_db_seed.sh
     
 - name: Install "osticketenv.template" 
   copy:
@@ -31,21 +60,64 @@
     mode: 0644
 
 - name: Install maintenance scripts
-  vars:
-    docker_volumes: "{{ osticket_volumes | default(['osticket_mysql', 'osticket_osticket']) }}"
   template:
-    src: "bin/{{item}}"
-    dest: "{{ docker_ctx }}/usr/osticket/bin/{{item}}"
+    src: "bin/{{ item }}"
+    dest: "{{ docker_ctx }}/usr/osticket/bin/{{ item }}"
     mode: 0755
   with_items:
     - backup_db.sh       
     - restore_db.sh
+    - start.sh
     - stop.sh
     - create_db_seed.sh
+
+- name: Install stnadard docker (not swarm) support scripts
+  template:
+    src: "bin/{{ item }}"
+    dest: "{{ docker_ctx }}/usr/osticket/bin/{{ item }}"
+    mode: 0755
+  with_items:
     - nuke_all.sh
-    - start.sh
-    - deploy_stack.sh
+  when: not swarm_deployment
+
+- name: Install standalone support scripts
+  template:
+    src: "bin/{{ item }}"
+    dest: "{{ docker_ctx }}/usr/osticket/bin/{{ item }}"
+    mode: 0755
+  with_items:
     - log_utils
+  when: standalone_deployment
+
+- name: Setup standalone env
+  copy:
+    src: 'etc/env.cfg.standalone'
+    dest: "{{ docker_ctx }}/etc/osticket/env/.envosticket"
+    mode: 0640
+  when: standalone_deployment
+
+- name: Setup non standalone env
+  copy:
+    src: 'etc/env.cfg'
+    dest: "{{ docker_ctx }}/etc/osticket/env/.envosticket"
+    decrypt: true
+    group: docker
+    mode: 0640
+  when: not standalone_deployment
+
+- name: Install "docker-compose.yml" 
+  template:
+    src: etc/docker-compose.yml
+    dest: "{{ docker_ctx }}/etc/osticket/docker-compose.yml"
+    mode: 0644
+
+
+- name: Install "proxy.conf" 
+  template:
+    src: etc/proxy.conf
+    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/proxy.conf"
+    mode: 0644
+
 
 # - name: Ensure volumes
 #   file:
@@ -53,10 +125,6 @@
 #     mode: 0755
 #     recurse: yes
 #     state: directory
-#   with_items: "{{ osticket_volumes | default(['osticket_mysql', 'osticket_osticket']) }}"
+#   with_items: "{{ docker_volumes }}"
 
-- name: Install "proxy.conf" 
-  template:
-    src: etc/proxy.conf
-    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/proxy.conf"
-    mode: 0644
+    

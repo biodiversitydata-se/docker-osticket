@@ -1,10 +1,10 @@
 #!/bin/bash
 # Start fresh with all docker imges, containers and volumes gone...
 cd $(dirname $0)
-{% if deployment_prefix is defined  %}
-. /opt/sbdi/lib/log_utils
-{% else %}
+{% if standalone_deployment  %}
 . log_utils
+{% else %}
+. /opt/sbdi/lib/log_utils
 {% endif %}
 
 cd ..
@@ -38,9 +38,10 @@ fi
 
 log_info "Runing nuke all for ${application_name}"
 
-log_info "Stopping all containers"
+log_info "Stopping all services"
 ./usr/${application_name}/bin/stop.sh
 
+# TODO: Has to be modified in swarm deployment?
 
 for container in $(docker ps -a | grep "_${name_key}" | awk '{print $1}')
 do

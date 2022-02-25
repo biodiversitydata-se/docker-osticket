@@ -1,0 +1,71 @@
+version: '3.7'
+
+{% if not standalone_deployment %}
+networks:
+  {{ frontend_network }}:
+    external: true
+{% endif %}
+
+services:
+  mysql_osticket:
+{% if standalone_deployment %}
+    container_name: mysql_osticket
+{% endif %}
+    restart: unless-stopped
+    image: mysql:5.7.35
+    env_file: "${DOCKER_CTX:-/docker}/etc/osticket/env/.envosticket"
+    volumes:
+      -  data_osticket_mysql:/var/lib/mysql
+      - "${DOCKER_CTX:-/docker}/etc/osticket/db/initdb.d:/docker-entrypoint-initdb.d"
+{% if not standalone_deployment %}
+    networks:
+      - {{ frontend_network }}
+{% endif %}
+
+  osticket:
+{% if standalone_deployment %}
+    container_name: sbdi_osticket
+{% endif %}
+    image: ghcr.io/biodiversitydata-se/docker-osticket/osticket:{{osticket_version}} 
+    restart: unless-stopped
+    depends_on:
+      - mysql_osticket
+    links: 
+      - mysql_osticket:mysql
+    env_file: "${DOCKER_CTX:-/docker}/etc/osticket/env/.envosticket"
+    volumes:
+      - data_osticket_osticket:/var/lib/osticket
+{% if development_deployment %}      
+      - src_osticket_osticket:/var/www/html
+{% endif %}
+{% if standalone_deployment %}
+    ports:
+      - 8081:80
+{% else %}
+    networks:
+      - {{ frontend_network }}
+{% endif %}
+
+volumes:
+  data_osticket_mysql:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_mysql"
+  data_osticket_osticket:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_osticket"
+{% if development_deployment %} 
+  src_osticket_osticket:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_osticket_src"
+{% endif %}
+
+# TODO: Add HTTP Proxy for standalone deployment 

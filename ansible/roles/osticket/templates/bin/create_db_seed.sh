@@ -1,9 +1,9 @@
 #! /bin/bash
 cd $(dirname $0)
-{% if deployment_prefix is defined  %}
-. /opt/sbdi/lib/log_utils
-{% else %}
+{% if standalone_deployment  %}
 . log_utils
+{% else %}
+. /opt/sbdi/lib/log_utils
 {% endif %}
 
 cd ..
@@ -14,9 +14,9 @@ cd ${DOCKER_CTX}/etc/${application_name}
 
 export $(grep -v '^#' env/.envosticket | xargs)
 
-[ -z "$MYSQL_HOST" ] &&  log_fatal 91 "MYSQL_HOST not in ./env file" 
-[ -z "$MYSQL_DATABASE" ] &&  log_fatal 92 "MYSQL_DATABASE not in ./env file" 
-[ -z "$MYSQL_ROOT_PASSWORD" ] &&  log_fatal 93 "MYSQL_ROOT_PASSWORD not in ./env file" 
+[ -z "$MYSQL_HOST" ] &&  log_fatal 91 "MYSQL_HOST not in env file" 
+[ -z "$MYSQL_DATABASE" ] &&  log_fatal 92 "MYSQL_DATABASE not in env file" 
+[ -z "$MYSQL_ROOT_PASSWORD" ] &&  log_fatal 93 "MYSQL_ROOT_PASSWORD not in env file" 
 
 init_sql_file=${DOCKER_CTX}/etc/${application_name}/db/initdb.d/init.sql
 

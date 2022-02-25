@@ -1,0 +1,23 @@
+osticket_version: 1.15.4.2
+
+# Will we run in a swarm or under the Docker deamon?
+swarm_deployment: yes
+
+# Will we run only this service?
+# (i.e. deploy our own httpproxy, not use CAS a.s.o. )
+standalone_deployment: no
+
+# Will we expose internal volumes?
+development_deployment: no 
+
+server_name: 'support'
+domain: 'sbdi.se'
+
+frontend_network: sbdi_frontend
+# TODO: Introduce a backend network also!
+
+
+basic_volumes: ['osticket_mysql', 'osticket_osticket']
+dev_volumes: "{{ ['osticket_osticket_src'] if development_deployment else [] }}"
+docker_volumes: "{{ basic_volumes + dev_volumes }}"
+

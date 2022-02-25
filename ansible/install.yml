@@ -9,15 +9,4 @@
     - debug:
         var: docker_ctx
 
-    - name: Install "docker-compose.yml" 
-      copy:
-        src: etc/docker-compose.yml
-        dest: "{{ docker_ctx }}/etc/osticket/docker-compose.yml"
-        mode: 0644
-
-    - name: Setup env
-      copy:
-        src: etc/env.cfg
-        dest: "{{ docker_ctx }}/etc/osticket/env/.envosticket"
-        mode: 0640
   
