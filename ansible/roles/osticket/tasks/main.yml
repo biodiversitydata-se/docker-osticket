@@ -12,6 +12,12 @@
     var: domain
 - debug:
     var: frontend_network
+
+- debug:
+    var: test_param
+
+  
+  
     
 - name: Ensure configuration and script directories
   file:
