@@ -8,7 +8,7 @@ networks:
 
 services:
   mysql_osticket:
-{% if standalone_deployment %}
+{% if not swarm_deployment %}
     container_name: mysql_osticket
 {% endif %}
     restart: unless-stopped
@@ -23,7 +23,7 @@ services:
 {% endif %}
 
   osticket:
-{% if standalone_deployment %}
+{% if not swarm_deployment %}
     container_name: sbdi_osticket
 {% endif %}
     image: ghcr.io/biodiversitydata-se/docker-osticket/osticket:{{osticket_version}} 

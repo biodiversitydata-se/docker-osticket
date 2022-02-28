@@ -12,14 +12,12 @@
     var: domain
 - debug:
     var: frontend_network
-- debug:
-    var: docker_volumes
     
 - name: Ensure configuration and script directories
   file:
     path: "{{ docker_ctx }}/{{item}}"
     mode: 0755
-    recurse: yes
+#    recurse: yes
     state: directory
   with_items:
     - etc/osticket
@@ -95,15 +93,6 @@
     dest: "{{ docker_ctx }}/etc/osticket/env/.envosticket"
     mode: 0640
   when: standalone_deployment
-
-- name: Setup non standalone env
-  copy:
-    src: 'etc/env.cfg'
-    dest: "{{ docker_ctx }}/etc/osticket/env/.envosticket"
-    decrypt: true
-    group: docker
-    mode: 0640
-  when: not standalone_deployment
 
 - name: Install "docker-compose.yml" 
   template:
