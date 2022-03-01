@@ -1,4 +1,4 @@
-osticket_version: "{{ docker_services.osticket.config.test_param | default(1.15.4.2) }}"
+osticket_version: "{{ docker_services.osticket.config.osticket_version | default(1.15.4.2) }}"
 
 # Will we run in a swarm or under the Docker deamon?
 swarm_deployment: yes

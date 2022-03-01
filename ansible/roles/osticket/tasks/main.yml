@@ -75,7 +75,7 @@
     - stop.sh
     - create_db_seed.sh
 
-- name: Install stnadard docker (not swarm) support scripts
+- name: Install standard docker (not swarm) support scripts
   template:
     src: "bin/{{ item }}"
     dest: "{{ docker_ctx }}/usr/osticket/bin/{{ item }}"
