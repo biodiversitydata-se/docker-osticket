@@ -52,20 +52,20 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_mysql"
+      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket/osticket_mysql"
   data_osticket_osticket:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_osticket"
+      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket/osticket_osticket"
 {% if development_deployment %} 
   src_osticket_osticket:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket_osticket_src"
+      device: "${DOCKER_CTX:-/docker}/var/volumes/osticket/osticket_osticket_src"
 {% endif %}
 
 # TODO: Add HTTP Proxy for standalone deployment 

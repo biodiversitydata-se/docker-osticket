@@ -1,4 +1,4 @@
-osticket_version: "{{ docker_services.osticket.config.osticket_version | default(1.15.4.2) }}"
+osticket_version: "{{ docker_applications.osticket.config.osticket_version | default(1.15.4.2) }}"
 
 # Will we run in a swarm or under the Docker deamon?
 swarm_deployment: yes
@@ -21,4 +21,4 @@ basic_volumes: ['osticket_mysql', 'osticket_osticket']
 dev_volumes: "{{ ['osticket_osticket_src'] if development_deployment else [] }}"
 docker_volumes: "{{ basic_volumes + dev_volumes }}"
 
-test_param: "{{ docker_services.osticket.config.test_param | default('test param default value') }}"
+test_param: "{{  docker_applications.osticket.config.test_param | default('test param default value') }}"

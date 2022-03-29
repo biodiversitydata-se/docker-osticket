@@ -86,13 +86,13 @@ do
     fi
 done
 
-for volume_dir in ./var/volumes/${application_name}_*
+for volume_dir in ./var/volumes/${application_name}/${application_name}_*
 do
     if sudo rm -rf ${volume_dir}
     then
-	log_info "Removed volume direcotry ${volume_dir}"
+	log_info "Removed volume  ${volume_dir}"
     else
-	log_error "Failed to removed volume direcotry ${volume_dir}"
+	log_error "Failed to removed volume  ${volume_dir}"
     fi
 done
 

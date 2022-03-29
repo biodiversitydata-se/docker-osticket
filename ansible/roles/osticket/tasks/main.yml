@@ -23,7 +23,6 @@
   file:
     path: "{{ docker_ctx }}/{{item}}"
     mode: 0755
-#    recurse: yes
     state: directory
   with_items:
     - etc/osticket
@@ -33,6 +32,7 @@
     - usr/osticket
     - usr/osticket/bin
     - var/volumes
+    - var/volumes/osticket
     - var/backup
     - var/backup/osticket
 
@@ -46,6 +46,7 @@
   with_items:
     - etc/osticket/db/initdb.d
     - var/backup/osticket
+    - var/volumes/osticket
   when: not standalone_deployment
 
 # Write access for group docker in  var/backup/osticket for backup_db.sh
@@ -71,18 +72,18 @@
   with_items:
     - backup_db.sh       
     - restore_db.sh
-    - start.sh
-    - stop.sh
     - create_db_seed.sh
 
-- name: Install standard docker (not swarm) support scripts
+- name: Install standalone maintenance scripts
   template:
     src: "bin/{{ item }}"
     dest: "{{ docker_ctx }}/usr/osticket/bin/{{ item }}"
     mode: 0755
   with_items:
+    - start.sh
+    - stop.sh
     - nuke_all.sh
-  when: not swarm_deployment
+  when: standalone_deployment
 
 - name: Install standalone support scripts
   template:
@@ -106,17 +107,22 @@
     dest: "{{ docker_ctx }}/etc/osticket/docker-compose.yml"
     mode: 0644
 
+- name: Install "application.cfg" 
+  template:
+    src: etc/application.cfg
+    dest: "{{ docker_ctx }}/etc/osticket/application.cfg"
+    mode: 0644
 
 - name: Install "proxy.conf" 
   template:
     src: etc/proxy.conf
-    dest: "{{ docker_ctx | default('/docker') }}/etc/osticket/proxy.conf"
+    dest: "{{ docker_ctx }}/etc/osticket/proxy.conf"
     mode: 0644
 
 
 # - name: Ensure volumes
 #   file:
-#     path: "{{ docker_ctx }}/var/volumes/{{item}}"
+#     path: "{{ docker_ctx }}/var/volumes/osticket/{{item}}"
 #     mode: 0755
 #     recurse: yes
 #     state: directory
